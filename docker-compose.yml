@@ -13,3 +13,7 @@ services:
     image: localhost/fs-frontend-image:latest
     ports:
       - "4200:80"
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    stdin_open: true
