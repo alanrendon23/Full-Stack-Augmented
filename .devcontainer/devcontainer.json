@@ -23,6 +23,6 @@
       }
     }
   },
-  "postCreateCommand": "cd front && pnpm install || true",
-  "postStartCommand": "echo '--- Entorno Full Stack listo ---'; echo 'Frontend: en carpeta /front'; echo 'Backend: en carpeta /backend'; echo 'Para iniciar backend: docker compose up --build backend'"
+  "postCreateCommand": "cd front || true",
+  "postStartCommand": "echo '--- Full Stack environment ready ---'; echo 'Frontend: in /front folder'; echo 'Backend: in /backend folder'; echo 'To start backend: docker compose up --build backend'"
 }

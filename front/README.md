@@ -1,27 +1,53 @@
-# Front
+# Frontend — Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
+This frontend is an Angular application (Angular CLI). It can run standalone for development or be packaged into a container using the provided `Dockerfile`.
 
-## Development server
+Prerequisites
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js (for local development)
+- `pnpm` (recommended) or `npm`
 
-## Code scaffolding
+Local development (standalone)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Install dependencies (from the `front/` folder):
 
-## Build
+```bash
+pnpm install    # or: npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. Start the dev server:
 
-## Running unit tests
+```bash
+pnpm start      # or: npm run start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Open `http://localhost:4200/` to view the app.
 
-## Running end-to-end tests
+Build
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+pnpm build      # or: npm run build
+```
 
-## Further help
+Docker image (build and run)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. Build the frontend image from the project root or `front/` folder:
+
+```bash
+docker build -t fs-frontend-image ./front
+# or with podman
+podman build -t fs-frontend-image ./front
+```
+
+2. Run the container, mapping host port `4200` to the container's port `80`:
+
+```bash
+docker run -p 4200:80 fs-frontend-image
+# or with podman
+podman run -p 4200:80 fs-frontend-image
+```
+
+Notes
+
+- The devcontainer configuration references the `frontend` service and mounts the workspace into `/workspace`.
+- The frontend expects the backend API to be reachable at `http://localhost:8080` in local setups.

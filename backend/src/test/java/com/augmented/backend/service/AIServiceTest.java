@@ -31,11 +31,11 @@ class AIServiceTest {
     @Test
     void analyzeStudyContent_Success() {
         // Arrange
-        String description = "La fotosíntesis es fundamental.";
-        String aiOutput = "IMPROVED_DESCRIPTION: Descripcion mejorada\n" +
-                "SUMMARY: Resumen corto\n" +
-                "CONCEPTS: concepto1, concepto2\n" +
-                "FLASHCARDS: [{\"q\": \"que es?\", \"a\": \"esto\"}]";
+        String description = "Photosynthesis is fundamental.";
+        String aiOutput = "IMPROVED_DESCRIPTION: Improved description\n" +
+            "SUMMARY: Short summary\n" +
+            "CONCEPTS: concept1, concept2\n" +
+            "FLASHCARDS: [{\"q\": \"what is it?\", \"a\": \"this\"}]";
 
         when(client.chat().completions().create(any(ChatCompletionCreateParams.class))
                 .choices().get(0).message().content())
@@ -45,11 +45,11 @@ class AIServiceTest {
         AIStudyResponse response = aiService.analyzeStudyContent(description);
 
         // Assert
-        assertEquals("Descripcion mejorada", response.getImprovedDescription());
-        assertEquals("Resumen corto", response.getSummary());
-        assertTrue(response.getKeyConcepts().contains("concepto1"));
-        assertTrue(response.getKeyConcepts().contains("concepto2"));
-        assertEquals("[{\"q\": \"que es?\", \"a\": \"esto\"}]", response.getFlashcards());
+        assertEquals("Improved description", response.getImprovedDescription());
+        assertEquals("Short summary", response.getSummary());
+        assertTrue(response.getKeyConcepts().contains("concept1"));
+        assertTrue(response.getKeyConcepts().contains("concept2"));
+        assertEquals("[{\"q\": \"what is it?\", \"a\": \"this\"}]", response.getFlashcards());
     }
 
     @Test
@@ -72,10 +72,10 @@ class AIServiceTest {
 
     @Test
     void analyzeStudyContent_ParsingError() {
-        // En caso de que el output de la IA no tenga el formato esperado, el catch de parseStudyOutput retornará el output original
+        // If the AI output doesn't match the expected format, the parseStudyOutput catch will return the original output
         // Arrange
-        String description = "Contenido";
-        String malformedOutput = "Output sin formato correcto";
+        String description = "Content";
+        String malformedOutput = "Output with incorrect format";
 
         when(client.chat().completions().create(any(ChatCompletionCreateParams.class))
                 .choices().get(0).message().content())

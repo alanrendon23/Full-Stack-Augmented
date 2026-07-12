@@ -4,6 +4,8 @@ services:
     build:
       context: ./backend
     image: localhost/augmented-backend:latest
+    env_file:
+      - ./.env
     ports:
       - "8080:8080"
 
