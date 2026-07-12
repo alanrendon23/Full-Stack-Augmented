@@ -1,0 +1,57 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1>My Study Notes</h1>
+    <button
+      mat-flat-button
+      color="primary"
+      class="square-button"
+      (click)="createNote()"
+    >
+      <mat-icon>add</mat-icon>
+      Add Note
+    </button>
+  </div>
+
+  <div class="notes-grid">
+    @defer (when isLoaded()) {
+      @for (note of notes(); track note.id) {
+        <mat-card class="note-card" (click)="viewNote(note.id)">
+          <mat-card-header>
+            <div mat-card-avatar class="subject-icon">
+              <mat-icon>{{ getSubjectIcon(note.subject) }}</mat-icon>
+            </div>
+            <mat-card-title>{{ note.title }}</mat-card-title>
+            <mat-card-subtitle>{{ note.subject }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="description-preview">{{ note.description }}</p>
+            @if (note.keyConcepts?.length) {
+              <mat-chip-set>
+                @for (concept of note.keyConcepts?.slice(0, 3); track concept) {
+                  <mat-chip>{{ concept }}</mat-chip>
+                }
+              </mat-chip-set>
+            }
+          </mat-card-content>
+          <mat-card-actions align="end" class="delete-btn-container">
+            <button
+              mat-icon-button
+              class="delete-button"
+              (click)="deleteNote($event, note.id)"
+              matTooltip="Delete note"
+            >
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <div class="no-notes">
+          <mat-icon>description</mat-icon>
+          <p>No notes found. Create your first study note!</p>
+        </div>
+      }
+    } @placeholder {
+      <div class="loading">Loading notes...</div>
+    }
+  </div>
+</div>

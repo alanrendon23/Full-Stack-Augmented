@@ -1,0 +1,48 @@
+<div class="flashcard-container" *ngIf="flashcards && flashcards.length > 0">
+  <div class="card-wrapper" (click)="flip()">
+    <div class="flip-card-inner" [class.flipped]="isFlipped()">
+      <div class="flip-card-front">
+        <mat-card>
+          <mat-card-content>
+            <div class="label">Question</div>
+            <p class="content-text">
+              {{ flashcards[currentIndex()].question }}
+            </p>
+          </mat-card-content>
+          <mat-card-footer>
+            <small>Click to reveal answer</small>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+      <div class="flip-card-back">
+        <mat-card>
+          <mat-card-content>
+            <div class="label">Answer</div>
+            <p class="content-text">{{ flashcards[currentIndex()].answer }}</p>
+          </mat-card-content>
+          <mat-card-footer>
+            <small>Click to see question</small>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button mat-icon-button (click)="prev()" [disabled]="currentIndex() === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span>{{ currentIndex() + 1 }} / {{ flashcards.length }}</span>
+    <button
+      mat-icon-button
+      (click)="next()"
+      [disabled]="currentIndex() === flashcards.length - 1"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!flashcards || flashcards.length === 0" class="no-flashcards">
+  <p>No flashcards generated for this note yet.</p>
+</div>
