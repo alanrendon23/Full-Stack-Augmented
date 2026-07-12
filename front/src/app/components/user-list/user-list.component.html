@@ -1,0 +1,43 @@
+<div class="user-container">
+  <h2>Gestión de usuarios</h2>
+
+  <form (ngSubmit)="submitUser()" class="user-form">
+    <input
+      type="text"
+      [(ngModel)]="userForm.name"
+      name="name"
+      placeholder="Nombre"
+      required
+    />
+    <input
+      type="email"
+      [(ngModel)]="userForm.email"
+      name="email"
+      placeholder="Correo"
+      required
+    />
+    <button type="submit">
+      {{ editingId !== null ? "Actualizar" : "Crear" }}
+    </button>
+    <button type="button" (click)="resetForm()" *ngIf="editingId !== null">
+      Cancelar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <p *ngIf="loading">Cargando usuarios...</p>
+
+  <ul class="user-list" *ngIf="!loading">
+    <li *ngFor="let user of users" class="user-item">
+      <div>
+        <strong>{{ user.name }}</strong>
+        <div>{{ user.email }}</div>
+      </div>
+      <div class="actions">
+        <button type="button" (click)="editUser(user)">Editar</button>
+        <button type="button" (click)="deleteUser(user.id)">Eliminar</button>
+      </div>
+    </li>
+  </ul>
+</div>

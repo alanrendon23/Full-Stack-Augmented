@@ -1,0 +1,23 @@
+<div class="todo-container">
+  <div class="input-group">
+    <input #todoInput placeholder="New task" />
+    <button
+      (click)="todoService.addTodo(todoInput.value); todoInput.value = ''"
+    >
+      Add
+    </button>
+  </div>
+
+  <ul class="todo-list">
+    <li *ngFor="let todo of todoService.todos" class="todo-item">
+      <span>{{ todo.title }}</span>
+      <button (click)="todoService.deleteTodo(todo.id)" class="delete-btn">
+        Delete
+      </button>
+    </li>
+  </ul>
+
+  <p *ngIf="todoService.todos.length === 0" class="empty-state">
+    No tasks yet. Add one to get started!
+  </p>
+</div>
