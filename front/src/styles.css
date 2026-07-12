@@ -1,21 +1,18 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   margin: 0;
   background: #f5f7fb;
   color: #222;
 }
 
 main {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
+  margin-top: 2rem;
 }
 
-.user-container {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.full-width {
+  width: 100%;
 }
 
 .user-form {
@@ -38,12 +35,13 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  background: #2563eb;
+  background: #2d3748;
   color: white;
+  transition: all 0.2s;
 }
 
 button:hover {
-  background: #1d4ed8;
+  background: #1a202c;
 }
 
 .user-list {
@@ -70,4 +68,26 @@ button:hover {
 
 .error {
   color: #dc2626;
+}
+
+/* Custom Toolbar */
+mat-toolbar {
+  background-color: #1a202c !important;
+  color: white !important;
+  height: 64px !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  z-index: 1000;
+  position: relative;
+}
+
+mat-toolbar span {
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: -0.025em;
+}
+
+mat-toolbar mat-icon {
+  color: #a0aec0;
 }

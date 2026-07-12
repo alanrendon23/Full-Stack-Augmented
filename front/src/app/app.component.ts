@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { UserListComponent } from './components/user-list/user-list.component';
+import { RouterOutlet } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [UserListComponent],
+  imports: [RouterOutlet, MatToolbarModule, MatIconModule],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'Users CRUD';
+  title = 'AI Study Assistant';
 }

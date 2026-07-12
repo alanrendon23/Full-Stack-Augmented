@@ -1,0 +1,172 @@
+<div class="detail-container">
+  <div class="nav-header">
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ isEditMode() ? "Edit Note" : "Create New Note" }}</h2>
+  </div>
+
+  <mat-progress-bar *ngIf="isLoading()" mode="indeterminate"></mat-progress-bar>
+
+  <div class="content-layout">
+    <!-- Form Section -->
+    <div class="form-section">
+      <mat-card>
+        <mat-card-content>
+          <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input
+                matInput
+                formControlName="title"
+                placeholder="E.g. Cell Biology Foundations"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Subject</mat-label>
+              <mat-select formControlName="subject">
+                @for (sub of subjects; track sub) {
+                  <mat-option [value]="sub">{{ sub }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                rows="10"
+                placeholder="Paste your notes or summary here..."
+              ></textarea>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                class="square-button"
+                type="submit"
+                [disabled]="noteForm.invalid || isLoading()"
+              >
+                <mat-icon>save</mat-icon> Save Note
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Current AI Content (If exists) -->
+      @if (currentNote()?.aiSummary || currentNote()?.flashcards?.length) {
+        <mat-divider style="margin: 20px 0"></mat-divider>
+
+        <mat-accordion multi>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>AI Summary & Concepts</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="ai-content-display">
+              <h3>Summary</h3>
+              <p>{{ currentNote()?.aiSummary }}</p>
+              <h3>Key Concepts</h3>
+              <mat-chip-set>
+                @for (concept of currentNote()?.keyConcepts; track concept) {
+                  <mat-chip>{{ concept }}</mat-chip>
+                }
+              </mat-chip-set>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Study Mode (Flash Cards)</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="useful-questions-container">
+              <app-flashcards
+                [flashcards]="currentNote()?.flashcards || []"
+              ></app-flashcards>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      }
+    </div>
+
+    <!-- AI Sidebar (Magic Section) -->
+    <div class="ai-sidebar" *ngIf="isEditMode()">
+      <mat-card class="magic-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon color="accent">auto_awesome</mat-icon> AI Insights
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (isGeneratingAi()) {
+            <div class="generating-status">
+              <mat-spinner diameter="30"></mat-spinner>
+              <p>Gemini is analyzing your note...</p>
+            </div>
+          } @else if (aiPreview()) {
+            <div class="preview-results">
+              <h3>Suggested Description</h3>
+              <p class="summary-preview">{{ aiPreview()?.description }}</p>
+
+              <div class="summary-preview">
+                <strong>Summary</strong>
+                <p>{{ aiPreview()?.aiSummary }}</p>
+              </div>
+
+              <h3>Key Concepts</h3>
+              <mat-chip-set>
+                @for (concept of aiPreview()?.keyConcepts; track concept) {
+                  <mat-chip>{{ concept }}</mat-chip>
+                }
+              </mat-chip-set>
+
+              @if (aiPreview()?.flashcards?.length) {
+                <h3>Flashcards</h3>
+                <div class="flashcards-preview-list">
+                  @for (card of aiPreview()?.flashcards; track card) {
+                    <div class="preview-card-item">
+                      <strong>Q:</strong> {{ card.question }}<br />
+                      <strong>A:</strong> {{ card.answer }}
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="sidebar-actions">
+                <button
+                  mat-flat-button
+                  color="accent"
+                  class="square-button"
+                  (click)="applyAi()"
+                >
+                  <mat-icon>check</mat-icon>
+                  Apply suggested by AI
+                </button>
+                <button
+                  mat-button
+                  class="square-button"
+                  (click)="aiPreview.set(null)"
+                >
+                  Discard
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="ai-cta">
+              <p>
+                Enhance your notes with AI summaries, key concepts, and
+                flashcards.
+              </p>
+              <button mat-stroked-button color="accent" (click)="generateAi()">
+                <mat-icon>auto_awesome</mat-icon> Generate with IA
+              </button>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
