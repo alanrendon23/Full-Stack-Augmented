@@ -1,7 +1,7 @@
 {
   "name": "Full Stack Devcontainer (backend + frontend)",
   "dockerComposeFile": ["../docker-compose.yml"],
-  "service": "backend",
+  "service": "frontend",
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "forwardPorts": [8080, 4200],
@@ -10,14 +10,19 @@
       "extensions": [
         "vscjava.vscode-java-pack",
         "redhat.java",
+        "vscjava.vscode-gradle",
         "angular.ng-template",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens"
-      ]
+        "eamodio.gitlens",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        "terminal.integrated.cwd": "/workspace",
+        "editor.formatOnSave": true,
+        "java.configuration.updateBuildConfiguration": "interactive"
+      }
     }
   },
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash",
-    "editor.formatOnSave": true
-  }
+  "postCreateCommand": "cd front && pnpm install || true",
+  "postStartCommand": "echo '--- Entorno Full Stack listo ---'; echo 'Frontend: en carpeta /front'; echo 'Backend: en carpeta /backend'; echo 'Para iniciar backend: docker compose up --build backend'"
 }
