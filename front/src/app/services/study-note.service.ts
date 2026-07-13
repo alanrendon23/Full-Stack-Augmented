@@ -111,23 +111,25 @@ export class StudyNoteService {
       try {
         let rawData = data.flashcards;
 
-        // Double parsing protection
+        // Robust parsing for nested/double-encoded JSON strings.
         if (typeof rawData === 'string' && rawData.trim().length > 0) {
-          // If it starts with quotes, it might be double encoded
-          if (rawData.trim().startsWith('"')) {
-            try {
-              const inner = JSON.parse(rawData);
-              if (typeof inner === 'string') {
-                rawData = inner;
-              }
-            } catch (e) {}
-          }
-
           try {
-            const parsed = JSON.parse(rawData);
-            if (parsed) rawData = parsed;
+            // Attempt to unwrap nested JSON strings up to a few levels.
+            let attempt: any = rawData;
+            for (let i = 0; i < 6; i++) {
+              if (typeof attempt !== 'string') break;
+              try {
+                const parsed = JSON.parse(attempt);
+                // If parsing returns the same string, stop
+                if (parsed === attempt) break;
+                attempt = parsed;
+              } catch (e) {
+                break;
+              }
+            }
+            rawData = attempt;
           } catch (e) {
-            // If it's not valid JSON, leave it as is (could be already an object/array)
+            // leave rawData as-is on parse errors
           }
         }
 

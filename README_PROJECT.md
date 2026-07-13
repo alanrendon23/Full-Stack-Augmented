@@ -121,7 +121,53 @@ docker run -p 4200:80 fs-frontend-image
 
 Running both together (compose)
 
-The repository includes a `docker-compose.yml` that can build and run both services and uses a root `.env` to inject variables into the backend. For orchestrated runs you can use Docker Compose or Podman Compose. See the top-level compose file for exact service names and port mappings.
+The repository includes a `docker-compose.yml` that can build and run both services and uses a root `.env` to inject variables into the backend. You can run the compose stack with Docker Compose or with Podman using `podman-compose`.
+
+Using Podman / podman-compose
+
+- Ensure Podman is installed and, on Windows/macOS, start the Podman machine if needed:
+
+```powershell
+podman machine init --now    # Windows/macOS only — create and start the VM
+podman machine start         # if the machine was previously created but stopped
+```
+
+- Create a root `.env` file (placed at the repository root) to provide runtime environment variables for services. Do not commit real secrets. Prefer creating a `.env.example` with placeholder values and keep the real `.env` in your local environment or CI secrets.
+
+Example `.env` (do NOT commit the real file):
+
+```
+OPENAI_API_KEY=your_real_key_here
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+```
+
+Create an example file for the repository so others know the required variables:
+
+```
+# .env.example (commit this file instead of a real .env)
+OPENAI_API_KEY=REPLACE_ME
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+```
+
+- Start the stack with `podman-compose` (same arguments as docker-compose):
+
+```powershell
+podman-compose -f docker-compose.yml up -d --build
+```
+
+- Stop and remove the stack:
+
+```powershell
+podman-compose -f docker-compose.yml down
+```
+
+Notes:
+
+- `podman-compose` loads the root `.env` automatically (same behavior as Docker Compose). Keep secrets out of the repo and use `.env.example` for documentation.
+- If you need to inspect pods/containers/images with Podman, use `podman pod ps`, `podman ps -a`, and `podman images -a`.
+- To fully clean up images and pods (dangerous — destructive), use Podman commands such as `podman pod rm -a`, `podman rm -a`, and `podman rmi -a` (only when you intend to remove all local images/pods).
+
+See the top-level compose file for exact service names and port mappings.
 
 ---
 
@@ -148,11 +194,3 @@ The repository includes a `docker-compose.yml` that can build and run both servi
   - `src/app/models` — TypeScript models
 
 ---
-
-If you'd like, I can also:
-
-- add a `README_PROJECT.md` section with a small diagram, or
-- add a `.env.example` with placeholder keys (no secrets), or
-- add a `Makefile` with shortcuts for common tasks.
-
-Tell me which of those you'd like next.

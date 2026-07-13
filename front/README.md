@@ -21,6 +21,12 @@ pnpm install    # or: npm install
 pnpm start      # or: npm run start
 ```
 
+Test dev server:
+
+```bash
+pnpm exec ng test --watch=false --code-coverage --browsers=ChromeHeadless
+```
+
 Open `http://localhost:4200/` to view the app.
 
 Build
