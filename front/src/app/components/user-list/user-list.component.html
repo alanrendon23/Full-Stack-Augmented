@@ -1,32 +1,32 @@
 <div class="user-container">
-  <h2>Gestión de usuarios</h2>
+  <h2>User Management</h2>
 
   <form (ngSubmit)="submitUser()" class="user-form">
     <input
       type="text"
       [(ngModel)]="userForm.name"
       name="name"
-      placeholder="Nombre"
+      placeholder="Name"
       required
     />
     <input
       type="email"
       [(ngModel)]="userForm.email"
       name="email"
-      placeholder="Correo"
+      placeholder="Email"
       required
     />
     <button type="submit">
-      {{ editingId !== null ? "Actualizar" : "Crear" }}
+      {{ editingId !== null ? "Update" : "Create" }}
     </button>
     <button type="button" (click)="resetForm()" *ngIf="editingId !== null">
-      Cancelar
+      Cancel
     </button>
   </form>
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
-  <p *ngIf="loading">Cargando usuarios...</p>
+  <p *ngIf="loading">Loading users...</p>
 
   <ul class="user-list" *ngIf="!loading">
     <li *ngFor="let user of users" class="user-item">
@@ -35,8 +35,8 @@
         <div>{{ user.email }}</div>
       </div>
       <div class="actions">
-        <button type="button" (click)="editUser(user)">Editar</button>
-        <button type="button" (click)="deleteUser(user.id)">Eliminar</button>
+        <button type="button" (click)="editUser(user)">Edit</button>
+        <button type="button" (click)="deleteUser(user.id)">Delete</button>
       </div>
     </li>
   </ul>

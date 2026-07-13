@@ -32,7 +32,7 @@ export class UserListComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudo cargar la lista de usuarios.';
+        this.errorMessage = 'Failed to load user list.';
         this.loading = false;
       },
     });
@@ -40,7 +40,7 @@ export class UserListComponent implements OnInit {
 
   submitUser(): void {
     if (!this.userForm.name.trim() || !this.userForm.email.trim()) {
-      this.errorMessage = 'Nombre y correo son obligatorios.';
+      this.errorMessage = 'Name and email are required.';
       return;
     }
 
@@ -53,7 +53,7 @@ export class UserListComponent implements OnInit {
           this.loadUsers();
         },
         error: () => {
-          this.errorMessage = 'No se pudo actualizar el usuario.';
+          this.errorMessage = 'Failed to update user.';
         },
       });
       return;
@@ -65,7 +65,7 @@ export class UserListComponent implements OnInit {
         this.loadUsers();
       },
       error: () => {
-        this.errorMessage = 'No se pudo crear el usuario.';
+        this.errorMessage = 'Failed to create user.';
       },
     });
   }
@@ -81,7 +81,7 @@ export class UserListComponent implements OnInit {
     this.userService.deleteUser(id).subscribe({
       next: () => this.loadUsers(),
       error: () => {
-        this.errorMessage = 'No se pudo eliminar el usuario.';
+        this.errorMessage = 'Failed to delete user.';
       },
     });
   }
