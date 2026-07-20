@@ -102,7 +102,7 @@ class StudyNoteServiceTest {
         AIStudyResponse mockResponse = new AIStudyResponse("Better desc", "Summary", List.of("C1"), "[]");
         when(aiService.analyzeStudyContent(sampleNote.getDescription())).thenReturn(mockResponse);
 
-        AIStudyResponse result = studyNoteService.getAIPreview(1L);
+        AIStudyResponse result = studyNoteService.getAIPreview(1L).join();
 
         assertEquals("Better desc", result.getImprovedDescription());
         assertEquals("Summary", result.getSummary());
@@ -111,7 +111,7 @@ class StudyNoteServiceTest {
     @Test
     void getAIPreview_NotFound() {
         when(studyNoteRepository.findById(1L)).thenReturn(Optional.empty());
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> studyNoteService.getAIPreview(1L));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> studyNoteService.getAIPreview(1L).join());
         assertEquals("Note not found", exception.getMessage());
     }
 
