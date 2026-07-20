@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/study-notes")
@@ -49,12 +50,10 @@ public class StudyNoteController {
     }
 
     @GetMapping("/{id}/ai-preview")
-    public ResponseEntity<AIStudyResponse> previewAi(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(studyNoteService.getAIPreview(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public CompletableFuture<ResponseEntity<AIStudyResponse>> previewAi(@PathVariable Long id) {
+        return studyNoteService.getAIPreview(id)
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(e -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{id}/ai-apply")

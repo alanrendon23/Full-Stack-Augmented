@@ -4,10 +4,12 @@ import com.augmented.backend.model.AIStudyResponse;
 import com.augmented.backend.model.StudyNote;
 import com.augmented.backend.repository.StudyNoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +42,13 @@ public class StudyNoteService {
     /**
      * Generates an AI-suggested preview without saving it yet.
      */
-    public AIStudyResponse getAIPreview(Long id) {
+    @Async
+    public CompletableFuture<AIStudyResponse> getAIPreview(Long id) {
         StudyNote note = studyNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
 
-        return aiService.analyzeStudyContent(note.getDescription());
+        AIStudyResponse resp = aiService.analyzeStudyContent(note.getDescription());
+        return CompletableFuture.completedFuture(resp);
     }
 
     /**

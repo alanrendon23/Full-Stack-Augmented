@@ -2,7 +2,6 @@ package com.augmented.backend.controller;
 
 import com.augmented.backend.model.AIStudyResponse;
 import com.augmented.backend.model.StudyNote;
-import com.augmented.backend.model.Subject;
 import com.augmented.backend.service.StudyNoteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,7 +111,7 @@ class StudyNoteControllerTest {
     @Test
     void aiPreview_Success() throws Exception {
         AIStudyResponse response = new AIStudyResponse("improved", "summary", List.of("key"), "[]");
-        when(studyNoteService.getAIPreview(1L)).thenReturn(response);
+        when(studyNoteService.getAIPreview(1L)).thenReturn(java.util.concurrent.CompletableFuture.completedFuture(response));
 
         mockMvc.perform(get("/api/study-notes/1/ai-preview"))
                 .andExpect(status().isOk())
@@ -121,7 +120,9 @@ class StudyNoteControllerTest {
 
     @Test
     void aiPreview_NotFound() throws Exception {
-        when(studyNoteService.getAIPreview(1L)).thenThrow(new RuntimeException("Not found"));
+        java.util.concurrent.CompletableFuture<AIStudyResponse> failed = new java.util.concurrent.CompletableFuture<>();
+        failed.completeExceptionally(new RuntimeException("Not found"));
+        when(studyNoteService.getAIPreview(1L)).thenReturn(failed);
 
         mockMvc.perform(get("/api/study-notes/1/ai-preview"))
                 .andExpect(status().isNotFound());
