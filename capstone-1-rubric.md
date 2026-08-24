@@ -15,7 +15,7 @@
 
 ---
 
-### Reviewer 2
+### Reviewer 2: Salgado, Vladimir Armando
 | Trait | Rating (1-5) | Comments |
 | :--- | :--- | :--- |
 | **Full-Stack Integration**<br>*(Spring Boot + Angular connection, REST standards)* |5 | |
